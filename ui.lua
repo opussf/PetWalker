@@ -214,6 +214,24 @@ end
 -- 	chat_user_notification(format("%sAuto-summoning must be enabled for this! %s(%s/pw a%2$s)", CO.bw, CO.bn, CO.c))
 -- end
 
+--[[---------------------------------------------------------------------------
+Messages for when a pet is saved or not saved
+---------------------------------------------------------------------------]]--
+
+function ns.msg_pet_not_saved_not_verified()
+	if ns.db.verbosityLevel < 3 then return end
+	chat_user_notification(CO.bw .. "Summoned pet not saved.")
+end
+
+function ns.msg_pet_not_saved_isexcluded()
+	if ns.db.verbosityLevel < 2 then return end
+	chat_user_notification(CO.bw .. "Pet not saved because: Pet is in excluded list.")
+end
+
+function ns.msg_pet_saved(pet)
+	if ns.db.verbosityLevel < 1 then return end
+	chat_user_notification(format('%sYour saved pet is now %s', CO.bn, ns.id_to_link(pet) or '???'))
+end
 
 --[[---------------------------------------------------------------------------
 Three big messages: Status, Low Pet Pool, and Help
