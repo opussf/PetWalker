@@ -220,7 +220,7 @@ Messages for when a pet is saved or not saved
 
 function ns.msg_pet_not_saved_not_verified()
 	if ns.db.verbosityLevel < 3 then return end
-	chat_user_notification(CO.bw .. "Summoned pet not saved.")
+	chat_user_notification(CO.bw .. "Pet not saved because: Summoned by Battle System.")
 end
 
 function ns.msg_pet_not_saved_isexcluded()
