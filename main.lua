@@ -1017,6 +1017,35 @@ function ns:create_cfavs_checkbox()
 	return btn, label
 end
 
+--[[===========================================================================
+	Radio Presets
+===========================================================================]]--
+
+--[[
+These provide a way to save 10 presets (0-9), summon, and list them
+]]
+
+function ns.summon_radio( cmdIn )
+	local _, _, presetNum = strfind(cmdIn, '([0-9])')
+	presetNum = tonumber(presetNum)
+	if ns.db.presets and ns.db.presets[presetNum] then
+		ns:summon_pet(ns.db.presets[presetNum], true)
+		ns.msg_radio_summoned(ns.db.presets[presetNum], presetNum)
+	else
+		ns.msg_radio_summon_error(presetNum)
+	end
+end
+function ns.save_radio( cmdIn )
+	local _, _, presetNum = strfind(cmdIn, '([0-9])')
+	presetNum = tonumber(presetNum)
+	ns.db.presets = ns.db.presets or {}
+	ns.db.presets[presetNum] = C_PetJournalGetSummonedPetGUID()
+	ns.msg_radio_saved(ns.db.presets[presetNum], presetNum)
+end
+function ns.list_radio( cmdIn )
+	ns.msg_radio_list()
+end
+
 
 --[[ License ===================================================================
 

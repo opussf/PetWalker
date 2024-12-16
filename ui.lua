@@ -214,6 +214,55 @@ end
 -- 	chat_user_notification(format("%sAuto-summoning must be enabled for this! %s(%s/pw a%2$s)", CO.bw, CO.bn, CO.c))
 -- end
 
+--[[---------------------------------------------------------------------------
+Messages for when a pet is saved or not saved
+---------------------------------------------------------------------------]]--
+
+function ns.msg_pet_not_saved_not_verified()
+	if ns.db.verbosityLevel < 3 then return end
+	chat_user_notification(CO.bw .. "Pet not saved because: Summoned by Battle System.")
+end
+
+function ns.msg_pet_not_saved_isexcluded()
+	if ns.db.verbosityLevel < 2 then return end
+	chat_user_notification(CO.bw .. "Pet not saved because: Pet is in excluded list.")
+end
+
+function ns.msg_pet_saved(pet)
+	if ns.db.verbosityLevel < 1 then return end
+	chat_user_notification(format('%sYour saved pet is now %s', CO.bn, ns.id_to_link(pet) or '???'))
+end
+
+--[[---------------------------------------------------------------------------
+Messages for the radio feature
+---------------------------------------------------------------------------]]--
+
+function ns.msg_radio_summoned(pet, slot)
+	chat_user_notification(format('%s%s summoned from radio button %i', CO.bn, ns.id_to_link(pet) or '???', slot))
+end
+
+function ns.msg_radio_summon_error(slot)
+	chat_user_notification(CO.bw .. "No pet saved in radio button "..slot)
+end
+
+function ns.msg_radio_saved(pet, slot)
+	chat_user_notification(format('%s%s is now saved to radio button %i', CO.bn, ns.id_to_link(pet) or '???', slot))
+end
+
+function ns.msg_radio_list()
+	local body = {
+		CO.c .. 'Radio list.  /pw r<num> to summon, /pw r<num>save to save current pet.'
+	}
+	if ns.db.presets then
+		for index = 0,9 do
+			if ns.db.presets[index] then
+				table.insert(body, format("%s\n%i:%s", CO.c, index, ns.id_to_link(ns.db.presets[index])))
+			end
+		end
+	end
+	local body_text = table.concat( body, CO.bn )
+	chat_user_notification_large('', body_text, nil, '')
+end
 
 --[[---------------------------------------------------------------------------
 Three big messages: Status, Low Pet Pool, and Help
@@ -236,6 +285,9 @@ function ns.help_display()
 		CO.c .. '\n<number>', ': ', 'Set ', CO.k .. 'Summon Timer ', 'in minutes (', CO.c .. '1 ', 'to ', CO.c .. '1440', '; ', CO.c .. '0 ', 'to ', CO.k .. 'disable', ').',
 		CO.c .. '\np', ': ', 'Summon ', CO.k .. 'previous pet ', '.',
 		CO.c .. '\nv', ': ', CO.k .. 'Verbosity: ', CO.s .. 'silent ', '(only failures and warnings are printed to chat); ', CO.c .. 'vv ', 'for ', CO.s .. 'medium ', CO.k .. 'verbosity ', '(new summons); ', CO.c .. 'vvv ', 'for ', CO.s .. 'full ', CO.k .. 'verbosity ', '(also restored pets).',
+		CO.c .. '\nr0', ': ', 'Summon ', CO.k .. 'saved pet ', 'in radio button 0',
+		CO.c .. '\nr0save', ': ', 'Save ', CO.k .. 'current pet ', 'in radio button 0 ', 'buttons are numbered 0 to 9.',
+		CO.c .. '\nrlist', ': ', CO.k .. 'List ', 'radio buttons and saved pets.',
 		CO.c .. '\ns', ': ', 'Display current ', CO.k .. 'status/settings.',
 		CO.c .. '\nh', ': ', 'This help text.',
 	}
@@ -340,6 +392,12 @@ function SlashCmdList.PetWalker(cmd)
 		ns.summon_targetpet()
 	elseif cmd == 'h' or cmd == 'help' then
 		ns.help_display()
+	elseif strmatch(cmd, '^r[0-9]$') then
+		ns.summon_radio(cmd)
+	elseif strmatch(cmd, '^r[0-9]save$') then
+		ns.save_radio(cmd)
+	elseif cmd == 'rlist' then
+		ns.list_radio()
 	elseif cmd == '' then
 		ns.help_display()
 		ns.status_display()
