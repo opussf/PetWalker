@@ -842,16 +842,21 @@ function ns.save_pet()
 	-- after entering world events.
 	if not ns.pet_verified then
 		ns.debugprint '`save_pet` FAILURE, bc not `pet_verified`'
+		ns.msg_pet_not_saved_not_verified()
 		return
 	end
 	local actpet = C_PetJournalGetSummonedPetGUID()
-	if
-		not actpet
-		or is_excluded_by_id(actpet)
-	then
-		ns.debugprint '`save_pet` FAILURE: No `actpet` or `actpet` is excluded'
+	if actpet then
+		if is_excluded_by_id(actpet) then
+			ns.debugprint '`save_pet` FAILURE: `actpet` is excluded'
+			ns.msg_pet_not_saved_isexcluded()
+			return
+		end
+	else  -- no active pet
+		ns.debugprint '`save_pet` FAILURE: No `actpet`'
 		return
 	end
+
 	if ns.dbc.charFavsEnabled and ns.db.favsOnly then
 		if ns.dbc.currentPet == actpet then return end
 		ns.dbc.previousPet = ns.dbc.currentPet
@@ -862,6 +867,7 @@ function ns.save_pet()
 		ns.db.currentPet = actpet
 	end
 	ns.debugprint_pet '`save_pet` completed'
+	ns.msg_pet_saved(actpet)
 end
 
 
