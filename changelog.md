@@ -4,6 +4,12 @@ To see all commits, including all alpha changes, [***go here***](https://github.
 
 ## Releases
 
+#### 2.6.6 (2026-01-17)
+
+- Bumped compatibility flags to 12000+
+- This is unapproved, but the dumb Blizz changes forces us to do this, 
+- because otherwise a still working addon would be deactivated flat out.
+
 #### 2.6.5 (2025-12-03)
 
 - toc: remove 110205 flag.
