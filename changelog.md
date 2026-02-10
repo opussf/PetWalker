@@ -4,6 +4,13 @@ To see all commits, including all alpha changes, [***go here***](https://github.
 
 ## Releases
 
+#### 2.6.7 (2026-02-10)
+
+- Future-proof handling/migration of changed database structures.
+- Remove the old Recents migration.
+- Chat message (verbosity 3) when a duplicate pet GUID was removed from the Recents table.
+    - If you see this regularly, something isn’t quite right.
+    
 #### 2.6.6 (2026-01-17)
 
 - Bumped compatibility flags to 12000+
