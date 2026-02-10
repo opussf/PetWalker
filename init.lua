@@ -49,23 +49,49 @@ if type(_G.PetWalkerPerCharDB) ~= 'table' then
 	_G.PetWalkerPerCharDB = {}
 end
 
--- Cleanup/migrate
-if not _G.PetWalkerDB.dbVersion or _G.PetWalkerDB.dbVersion ~= DB_VERSION_CURRENT then
-	-- Migrate currentPet and previousPet to recentPets; inserting nil is OK
-	_G.PetWalkerDB.recentPets, _G.PetWalkerPerCharDB.recentPets = {}, {}
-	table.insert(_G.PetWalkerDB.recentPets, _G.PetWalkerDB.currentPet)
-	table.insert(_G.PetWalkerDB.recentPets, _G.PetWalkerDB.previousPet)
-	table.insert(_G.PetWalkerPerCharDB.recentPets, _G.PetWalkerPerCharDB.currentPet)
-	table.insert(_G.PetWalkerPerCharDB.recentPets, _G.PetWalkerPerCharDB.previousPet)
-	-- Cleanup old stuff
-	_G.PetWalkerDB.currentPet, _G.PetWalkerDB.previousPet, _G.PetWalkerPerCharDB.currentPet, _G.PetWalkerPerCharDB.previousPet, _G.PetWalkerPerCharDB.eventAlt =
-		nil, nil, nil, nil, nil
-end
 
 merge_defaults(defaults_global, _G.PetWalkerDB)
 merge_defaults(defaults_perchar, _G.PetWalkerPerCharDB)
-ns.db, ns.dbc = _G.PetWalkerDB, _G.PetWalkerPerCharDB
+local db, dbc = _G.PetWalkerDB, _G.PetWalkerPerCharDB
+ns.db, ns.dbc = db, dbc
 
+
+--[[----------------------------------------------------------------------------
+	DB Update
+----------------------------------------------------------------------------]]--
+
+local protected_tables = {
+	recentPets = true,
+	charFavs = true,
+}
+
+-- Reverse nil cleanup
+local function clean_removed(trg, ref)
+	for k, v in pairs(trg) do
+		if ref[k] == nil then
+			trg[k] = nil
+		elseif not protected_tables[k] and type(v) == 'table' then
+			clean_removed(v, ref[k])
+		end
+	end
+end
+
+local ver = db.dbVersion or 0 -- Apply to versions n or lower
+if ver == DB_VERSION_CURRENT then return end
+
+-- Do the modifications in descending order, in case we have historically overlapping changes!
+if ver < 2 then
+	table.insert(db.recentPets, db.currentPet)
+	table.insert(db.recentPets, db.previousPet)
+	table.insert(dbc.recentPets, dbc.currentPet)
+	table.insert(dbc.recentPets, dbc.previousPet)
+end
+
+clean_removed(db, defaults_global)
+clean_removed(dbc, defaults_perchar)
+
+db.dbVersion = DB_VERSION_CURRENT
+ns.db_updated = true
 
 --[[===========================================================================
 	Some variables and early stuff
