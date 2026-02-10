@@ -207,11 +207,6 @@ function ns.msg_pet_summon_failed()
 	chat_user_notification(CO.bw .. "You don't meet the conditions for summoning a pet right now.")
 end
 
--- If we block a command bc auto-summoning is disabled (aka events unregistered). Currently not used.
--- function ns.MsgAutoIsDisabled()
--- 	chat_user_notification(format("%sAuto-summoning must be enabled for this! %s(%s/pw a%2$s)", CO.bw, CO.bn, CO.c))
--- end
-
 
 --[[---------------------------------------------------------------------------
 Three big messages: Status, Low Pet Pool, and Help

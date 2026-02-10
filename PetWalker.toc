@@ -1,4 +1,4 @@
-## Interface: 110207, 120000, 120001, 120002
+## Interface: 120000, 120001, 120002, 120005
 ## Title: PetWalker
 ## Version: 2.6.6
 ## IconTexture: Interface/AddOns/PetWalker/icon.png
