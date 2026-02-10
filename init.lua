@@ -20,7 +20,7 @@ local function merge_defaults(src, dst)
 end
 
 -- 1: v2.6, Nov 2025: currentPet/previousPet --> recentPets ==> reset specific
-local DB_VERSION_CURRENT = 2
+local DB_VERSION_CURRENT = 2.0
 
 local defaults_global = {
 	dbVersion = DB_VERSION_CURRENT,
@@ -76,22 +76,26 @@ local function clean_removed(trg, ref)
 	end
 end
 
-local ver = db.dbVersion or 0 -- Apply to versions n or lower
-if ver == DB_VERSION_CURRENT then return end
+local function update_db()
+	local ver = db.dbVersion or 0
+	if ver == DB_VERSION_CURRENT then return end
 
--- Do the modifications in descending order, in case we have historically overlapping changes!
--- if ver < 2 then -- Not worth migrating this
--- 	table.insert(db.recentPets, db.currentPet)
--- 	table.insert(db.recentPets, db.previousPet)
--- 	table.insert(dbc.recentPets, dbc.currentPet)
--- 	table.insert(dbc.recentPets, dbc.previousPet)
--- end
+	-- Do the modifications in descending order, in case we have historically overlapping changes!
+	-- if ver < 2 then -- Not worth migrating this
+	-- table.insert(db.recentPets, db.currentPet)
+	-- table.insert(db.recentPets, db.previousPet)
+	-- table.insert(dbc.recentPets, dbc.currentPet)
+	-- table.insert(dbc.recentPets, dbc.previousPet)
+	-- end
 
-clean_removed(db, defaults_global)
-clean_removed(dbc, defaults_perchar)
+	clean_removed(db, defaults_global)
+	clean_removed(dbc, defaults_perchar)
 
-db.dbVersion = DB_VERSION_CURRENT
-ns.db_updated = true
+	db.dbVersion = DB_VERSION_CURRENT
+	ns.db_updated = true
+end
+
+update_db()
 
 --[[===========================================================================
 	Some variables and early stuff
