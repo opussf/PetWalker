@@ -594,7 +594,10 @@ function ns.save_pet()
 	local db = ns.dbc.charFavsEnabled and ns.db.favsOnly and ns.dbc or ns.db
 	if db.recentPets[1] == actpet then return end
 	for i = #db.recentPets, 1, -1 do
-		if db.recentPets[i] == actpet then table.remove(db.recentPets, i) end
+		if db.recentPets[i] == actpet then
+			table.remove(db.recentPets, i)
+			ns.msg_recents_dupe_removed(i)
+		end
 	end
 	table.insert(db.recentPets, 1, actpet)
 	while #db.recentPets > ns.db.numRecents do
