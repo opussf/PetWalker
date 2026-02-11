@@ -36,10 +36,10 @@ function ns.debug_display()
 	local actpet = C_PetJournal_GetSummonedPetGUID()
 	local lines = {
 		format('%sPW Debug:', COLOR_DEBUG),
-		format('%sDB current pet|r: %s [%s]', COLOR_DEBUG, ns.id_to_name(ns.db.currentPet), tostring(ns.db.currentPet)),
-		format('%sDB previous pet|r: %s [%s]', COLOR_DEBUG, ns.id_to_name(ns.db.previousPet), tostring(ns.db.previousPet)),
-		format('%sChar DB current pet|r: %s [%s]', COLOR_DEBUG, ns.id_to_name(ns.dbc.currentPet), tostring(ns.dbc.currentPet)),
-		format('%sChar DB previous pet|r: %s [%s]', COLOR_DEBUG, ns.id_to_name(ns.dbc.previousPet), tostring(ns.dbc.previousPet)),
+		format('%sDB current pet|r: %s [%s]', COLOR_DEBUG, ns.id_to_name(ns.db.recentPets[1]), tostring(ns.db.recentPets[1])),
+		format('%sDB previous pet|r: %s [%s]', COLOR_DEBUG, ns.id_to_name(ns.db.recentPets[2]), tostring(ns.db.recentPets[2])),
+		format('%sChar DB current pet|r: %s [%s]', COLOR_DEBUG, ns.id_to_name(ns.dbc.recentPets[1]), tostring(ns.dbc.recentPets[1])),
+		format('%sChar DB previous pet|r: %s [%s]', COLOR_DEBUG, ns.id_to_name(ns.dbc.recentPets[2]), tostring(ns.dbc.recentPets[2])),
 		format('%s`pet_verified`|r: %s', COLOR_DEBUG, tostring(ns.pet_verified)),
 		format('%sCurrently summoned pet|r: %s [%s]', COLOR_DEBUG, ns.id_to_name(actpet), tostring(actpet)),
 		'---',
@@ -74,7 +74,7 @@ function ns.debugprint_pet(msg)
 	local a, b = strsplit('.', GetTimePreciseSec())
 	local lines = {
 		format('[%s.%s] %sPW Debug|r: %s', a:sub(-3), b:sub(1, 3), COLOR_DEBUG, msg),
-		format('%sCurrent DB (%s) pet|r: %s', COLOR_DEBUG, ns.dbc.charFavsEnabled and ns.db.favsOnly and 'char' or 'global', ns.id_to_name(ns.dbc.charFavsEnabled and ns.db.favsOnly and ns.dbc.currentPet or ns.db.currentPet)),
+		format('%sCurrent DB (%s) pet|r: %s', COLOR_DEBUG, ns.dbc.charFavsEnabled and ns.db.favsOnly and 'char' or 'global', ns.id_to_name(ns.dbc.charFavsEnabled and ns.db.favsOnly and ns.dbc.recentPets[1] or ns.db.recentPets[1])),
 	}
 	for _, l in ipairs(lines) do print(l) end
 	end
