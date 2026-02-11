@@ -130,10 +130,10 @@ function ns.msg_manual_summon_stopped()
 	chat_user_notification(CO.bw .. 'You are in combat lockdown or flying; pet summoning aborted.')
 end
 
-function ns.msg_recents_dupe_removed(idx)
-	if ns.db.verbosityLevel < 3 then return end
-	chat_user_notification(CO.bn .. 'Removed a duplicate from recent pets at idx ' .. idx .. '.')
-end
+-- function ns.msg_recents_dupe_removed(idx)
+-- 	if ns.db.verbosityLevel < 3 then return end
+-- 	chat_user_notification(CO.bn .. 'Removed a duplicate from recent pets at idx ' .. idx .. '.')
+-- end
 
 
 -- Summon Target Pet messages

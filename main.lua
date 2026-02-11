@@ -596,7 +596,8 @@ function ns.save_pet()
 	for i = #db.recentPets, 1, -1 do
 		if db.recentPets[i] == actpet then
 			table.remove(db.recentPets, i)
-			ns.msg_recents_dupe_removed(i)
+			ns.debugprint('Removed a duplicate from recent pets at idx ' .. i .. '.')
+-- 			ns.msg_recents_dupe_removed(i)
 		end
 	end
 	table.insert(db.recentPets, 1, actpet)
