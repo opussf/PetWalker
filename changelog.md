@@ -4,6 +4,11 @@ To see all commits, including all alpha changes, [***go here***](https://github.
 
 ## Releases
 
+#### 2.6.8 (2026-02-11)
+
+- Move the new message from 2.6.7 to debugprints.
+- Fix a number of debugprints to correctly show the current pet name.
+
 #### 2.6.7 (2026-02-10)
 
 - Future-proof handling/migration of changed database structures.
