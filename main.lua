@@ -424,7 +424,7 @@ function ns:new_pet(the_time, manually_called)
 	local npool = #ns.pet_pool
 	local newpet
 	if npool == 0 then
-		if now - time_pool_msg > 30 then
+		if now - time_pool_msg > 90 then
 			ns.msg_low_petpool(npool)
 			time_pool_msg = now
 		end
@@ -676,7 +676,7 @@ function ns.initialize_pool()
 	end
 	ns.pool_initialized = true -- Condition in ns:new_pet and ns.ManualSummonNew
 	local now = time()
-	if #ns.pet_pool <= 0 and ns.db.newPetTimer ~= 0 and now - time_pool_msg > 30 then
+	if #ns.pet_pool <= 0 and ns.db.newPetTimer ~= 0 and now - time_pool_msg > 90 then
 		ns.msg_low_petpool(#ns.pet_pool)
 		time_pool_msg = now
 	end
